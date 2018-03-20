@@ -477,32 +477,14 @@ chrome.webRequest.onErrorOccurred.addListener(function(details) {
         });
       }
     }, {urls: ["<all_urls>"], types: ["main_frame"]});
-var contextMenuItemFirst={
-    "id":"first",
-    "title":"First Version",
-    "contexts":["all"]
-};
 
-var contextMenuItemRecent={
-    "id":"recent",
-    "title":"Recent Version",
-    "contexts":["all"]
-};
-var contextMenuItemAll={
-    "id":"all",
-    "title":"All Versions",
-    "contexts":["all"]
-};
 
-var contextMenuItemSave={
-    "id":"save",
-    "title":"Save Page Now",
-    "contexts":["all"]
-};
-chrome.contextMenus.create(contextMenuItemFirst);
-chrome.contextMenus.create(contextMenuItemRecent);
-chrome.contextMenus.create(contextMenuItemAll);
-chrome.contextMenus.create(contextMenuItemSave);
+// create context menu using for loops
+var contextList=["first","recent","all","save"];
+var contextTitle=["First Version","Recent Version","All Versions","Save Page Now"]
+for(i=0;i<contextList.length;i++){
+  chrome.contextMenus.create({id:contextList[i],title:contextTitle[i],contexts:["all"]});
+}
 
 function contextMenuOpener(type,page_url){
     var pattern = /https:\/\/web\.archive\.org\/web\/(.+?)\//g;
