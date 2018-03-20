@@ -1,20 +1,20 @@
 /* Load CSS and create the markup necessary to render the Site Map */
 if(document.getElementById('myModal') !== null) {
   document.getElementById('myModal').style.display="block";
-  var count=document.getElementById('myModal').getAttribute('count');
+  let count=document.getElementById('myModal').getAttribute('count');
   count++;
   document.getElementById('myModal').setAttribute('count',count);
 } else {
-  var styles = ['css/googlestyle.css', 'css/RTstyle.css', 'css/sequences.css',
+  const styles = ['css/googlestyle.css', 'css/RTstyle.css', 'css/sequences.css',
                 'css/radial-tree.css'];
-  for (var i in styles) {
-    var el = document.createElement('link');
+  for (const i in styles) {
+    const el = document.createElement('link');
     el.rel = 'stylesheet';
     el.type = 'text/css';
     el.href = chrome.extension.getURL(styles[i]);
     document.head.appendChild(el);
   }
-  var modal=document.createElement('div');
+  const modal=document.createElement('div');
   modal.setAttribute('id','myModal');
   modal.setAttribute('class','RTmodal');
   modal.setAttribute('count','1');
@@ -26,7 +26,7 @@ if(document.getElementById('myModal') !== null) {
   var message=document.createElement('div');
   message.setAttribute('id','message');
   **/
-  var span=document.createElement('button');
+  const span=document.createElement('button');
   span.innerHTML='&times';
   span.setAttribute('class','RTclose');
   modal.appendChild(span);
@@ -46,7 +46,7 @@ if(document.getElementById('myModal') !== null) {
   document.body.appendChild(modal);
   modal.style.display = "block";
 
-  span.onclick = function() {
+  span.onclick = () => {
     modal.style.display = "none";
   };
 }
