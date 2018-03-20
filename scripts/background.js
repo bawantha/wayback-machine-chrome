@@ -2,11 +2,11 @@
 * LICENSE: AGPL-3
 * Copyright 2016, Internet Archive
 */
-(function() {
-  var enforceBannerInterval;
-  var archiveLinkWasClicked = false;
-  var bannerWasShown = false;
-  var bannerWasClosed = false;
+((() => {
+  let enforceBannerInterval;
+  let archiveLinkWasClicked = false;
+  let bannerWasShown = false;
+  let bannerWasClosed = false;
   /**
   * Brute force inline css style reset
   */
@@ -44,13 +44,13 @@
   * @returns {object} DOM element
   */
   function createEl(type, handler) {
-    var el = document.createElement(type);
+    const el = document.createElement(type);
     resetStyesInline(el);
     if (handler !== undefined) {
       handler(el);
     }
     // Append *args to created el
-    for (var i = 2; i < arguments.length; i++) {
+    for (let i = 2; i < arguments.length; i++) {
       el.appendChild(arguments[i]);
     }
     return el;
@@ -62,7 +62,7 @@
     }
     document.body.appendChild(
       createEl("div",
-      function(el) {
+      el => {
         el.id = "no-more-404s-message";
         el.style.background = "rgba(0,0,0,.6)";
         el.style.position = "fixed";
@@ -76,7 +76,7 @@
         el.style.justifyContent ="center";
       },
       createEl("div",
-      function(el) {
+      el => {
         el.id = "no-more-404s-message-inner";
         el.style.flex = "0 0 420px";
         el.style.position = "relative";
@@ -92,7 +92,7 @@
         el.style.boxShadow = "0 4px 20px rgba(0,0,0,.5)";
       },
       createEl("div",
-      function(el) {
+      el => {
         el.id = "no-more-404s-header";
         el.style.alignItems = "center";
         el.style.backgroundColor = "#0996f8";
@@ -107,7 +107,7 @@
         el.appendChild(document.createTextNode("Page not available?"));
       },
       createEl("button",
-      function(el) {
+      el => {
         el.style.position = "absolute";
         el.style.display = "flex";
         el.style.alignItems = "center";
@@ -121,30 +121,30 @@
         el.style.boxSizing = "border-box";
         el.style.padding = "0";
         el.style.border = "none";
-        el.onclick = function() {
+        el.onclick = () => {
           clearInterval(enforceBannerInterval);
           document.getElementById("no-more-404s-message").style.display = "none";
           bannerWasClosed = true;
         };
-        el.onmouseenter = function() {
+        el.onmouseenter = () => {
           el.style.backgroundColor = "rgba(0,0,0,.1)";
           el.style.boxShadow = "0 1px 0 0 rgba(0,0,0,.1) inset";
         };
-        el.onmousedown = function() {
+        el.onmousedown = () => {
           el.style.backgroundColor = "rgba(0,0,0,.2)";
           el.style.boxShadow = "0 1px 0 0 rgba(0,0,0,.15) inset";
         };
-        el.onmouseup = function() {
+        el.onmouseup = () => {
           el.style.backgroundColor = "rgba(0,0,0,.1)";
           el.style.boxShadow = "0 1px 0 0 rgba(0,0,0,.1) inset";
         };
-        el.onmouseleave = function() {
+        el.onmouseleave = () => {
           el.style.backgroundColor = "transparent";
           el.style.boxShadow = "";
         };
       },
       createEl("img",
-      function(el) {
+      el => {
         el.src = chrome.extension.getURL("images/close.svg");
         el.alt = "close";
         el.style.height = "16px";
@@ -155,13 +155,13 @@
     )
   )
 ),
-createEl("p", function(el) {
+createEl("p", el => {
   el.appendChild(document.createTextNode("View a saved version courtesy of the"));
   el.style.fontSize = "16px";
   el.style.margin = "20px 0 4px 0";
   el.style.textAlign = "center";
 }),
-createEl("img", function(el) {
+createEl("img", el => {
   el.id = "no-more-404s-image";
   el.src = chrome.extension.getURL("images/logo.gif");
   el.style.height = "auto";
@@ -170,7 +170,7 @@ createEl("img", function(el) {
   el.style.boxSizing = "border-box";
   el.style.padding = "10px 22px";
 }),
-createEl("a", function(el) {
+createEl("a", el => {
   el.id = "no-more-404s-message-link";
   el.href = wayback_url;
   el.style.alignItems = "center";
@@ -185,26 +185,26 @@ createEl("a", function(el) {
   el.style.margin = "20px";
   el.style.textDecoration = "none";
   el.appendChild(document.createTextNode("Click here to see archived version"));
-  el.onmouseenter = function() {
+  el.onmouseenter = () => {
     el.style.backgroundColor = "#0675d3";
     el.style.border = "1px solid #0568ba";
   };
-  el.onmousedown = function() {
+  el.onmousedown = () => {
     el.style.backgroundColor = "#0568ba";
     el.style.border = "1px solid #0568ba";
   };
-  el.onmouseup = function() {
+  el.onmouseup = () => {
     el.style.backgroundColor = "#0675d3";
     el.style.border = "1px solid #0568ba";
   };
-  el.onmouseleave = function() {
+  el.onmouseleave = () => {
     el.style.backgroundColor = "#0996f8";
     el.style.border = "1px solid #0675d3";
   };
-  el.onclick = function(e) {
+  el.onclick = e => {
     archiveLinkWasClicked = true;
     // Work-around for myspace which hijacks the link
-    if (window.location.hostname.indexOf("myspace.com") >= 0) {
+    if (window.location.hostname.includes("myspace.com")) {
       e.preventDefault();
       return false;
     } else {
@@ -218,7 +218,7 @@ createEl("a", function(el) {
 document.getElementById("no-more-404s-message-link").focus();
 
 // Transition element in from top of page
-setTimeout(function() {
+setTimeout(() => {
   document.getElementById("no-more-404s-message").style.transform = "translate(0, 0%)";
 }, 100);
 
@@ -228,31 +228,31 @@ bannerWasShown = true;
 function checkIt(wayback_url) {
   // Some pages use javascript to update the dom so poll to ensure
   // the banner gets recreated if it is deleted.
-  enforceBannerInterval = setInterval(function() {
+  enforceBannerInterval = setInterval(() => {
     createBanner(wayback_url);
   }, 500);
 }
 
 
-})();
+}))();
 
 /*
 * License: AGPL-3
 * Copyright 2016, Internet Archive
 */
-var VERSION = "2.12";
+const VERSION = "2.12";
 Globalstatuscode="";
-var excluded_urls = [
+const excluded_urls = [
   "localhost",
   "0.0.0.0",
   "127.0.0.1"
 ];
 
-var WB_API_URL = "https://archive.org/wayback/available";
+const WB_API_URL = "https://archive.org/wayback/available";
 
 function isValidUrl(url) {
-  for (var i = 0; i < excluded_urls.length; i++) {
-    if (url.startsWith("http://" + excluded_urls[i]) || url.startsWith("https://" + excluded_urls[i])) {
+  for (let i = 0; i < excluded_urls.length; i++) {
+    if (url.startsWith(`http://${excluded_urls[i]}`) || url.startsWith(`https://${excluded_urls[i]}`)) {
       return false;
     }
   }
@@ -260,9 +260,9 @@ function isValidUrl(url) {
 }
 
 function rewriteUserAgentHeader(e) {
-  for (var header of e.requestHeaders) {
+  for (const header of e.requestHeaders) {
     if (header.name.toLowerCase() === "user-agent") {
-      header.value = header.value  + " Wayback_Machine_Chrome/" + VERSION + " Status-code/" + Globalstatuscode;
+      header.value = `${header.value} Wayback_Machine_Chrome/${VERSION} Status-code/${Globalstatuscode}`;
         console.log(header);
     }
   }
@@ -281,17 +281,17 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
  * Header callback
  */
 RTurl="";
-chrome.webRequest.onCompleted.addListener(function(details) {
+chrome.webRequest.onCompleted.addListener(details => {
   function tabIsReady(isIncognito) {
-    var httpFailCodes = [404, 408, 410, 451, 500, 502, 503, 504,
+    const httpFailCodes = [404, 408, 410, 451, 500, 502, 503, 504,
       509, 520, 521, 523, 524, 525, 526];
       
       if (isIncognito === false &&
         details.frameId === 0 &&
-        httpFailCodes.indexOf(details.statusCode) >= 0 &&
+        httpFailCodes.includes(details.statusCode) &&
         isValidUrl(details.url)) {
               Globalstatuscode=details.statusCode;
-              wmAvailabilityCheck(details.url, function(wayback_url, url) {
+              wmAvailabilityCheck(details.url, (wayback_url, url) => {
               if(details.statusCode==504){
                   //notify(wayback_url,'View an archived version courtesy of the Internet Archive WayBack Machine');
                   chrome.notifications.create(
@@ -305,11 +305,11 @@ chrome.webRequest.onCompleted.addListener(function(details) {
                     title: "Click here to see archived version"
                 }]
                 },
-                function(id){
+                id => {
                     myNotID=id;
                 } 
               );
-              chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
+              chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => {
     if (notifId === myNotID) {
         if (btnIdx === 0) {
                 chrome.tabs.create({ url:wayback_url});
@@ -321,20 +321,20 @@ chrome.webRequest.onCompleted.addListener(function(details) {
               }else{
                   chrome.tabs.executeScript(details.tabId, {
               file: "scripts/client.js"
-            }, function() {
+            }, () => {
               chrome.tabs.sendMessage(details.tabId, {
                 type: "SHOW_BANNER",
-                wayback_url: wayback_url
+                wayback_url
               });
             });
               }
-          }, function() {
+          }, () => {
             
           });
         }
       }
       if(details.tabId >0 ){
-        chrome.tabs.get(details.tabId, function(tab) {
+        chrome.tabs.get(details.tabId, tab => {
           tabIsReady(tab.incognito);
         });
       }
@@ -343,15 +343,15 @@ chrome.webRequest.onCompleted.addListener(function(details) {
  * Checks Wayback Machine API for url snapshot
  */
 function wmAvailabilityCheck(url, onsuccess, onfail) {
-  var xhr = new XMLHttpRequest();
-  var requestUrl = "https://archive.org/wayback/available";
-  var requestParams = "url=" + encodeURI(url);
+  const xhr = new XMLHttpRequest();
+  const requestUrl = "https://archive.org/wayback/available";
+  const requestParams = `url=${encodeURI(url)}`;
   xhr.open("POST", requestUrl, true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.setRequestHeader("Wayback-Api-Version", 2);
-  xhr.onload = function() {
-    var response = JSON.parse(xhr.responseText);
-    var wayback_url = getWaybackUrlFromResponse(response);
+  xhr.onload = () => {
+    const response = JSON.parse(xhr.responseText);
+    const wayback_url = getWaybackUrlFromResponse(response);
     if (wayback_url !== null) {
       onsuccess(wayback_url, url);
     } else if (onfail) {
@@ -396,9 +396,9 @@ function isValidSnapshotUrl(url) {
 
 function URLopener(open_url,url,wmAvailabilitycheck){
     if(wmAvailabilitycheck==true){
-        wmAvailabilityCheck(url,function(){
+        wmAvailabilityCheck(url,() => {
           chrome.tabs.create({ url:  open_url});
-    },function(){
+    },() => {
           alert("URL not found");
       });
     }else{
@@ -407,13 +407,13 @@ function URLopener(open_url,url,wmAvailabilitycheck){
 }
 
 
-chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if(message.message=='openurl'){
-      var page_url = message.page_url;
-      var wayback_url = message.wayback_url;
-      var pattern = /https:\/\/web\.archive\.org\/web\/(.+?)\//g;
-      var url = page_url.replace(pattern, "");
-      var open_url = wayback_url+encodeURI(url);
+      const page_url = message.page_url;
+      const wayback_url = message.wayback_url;
+      const pattern = /https:\/\/web\.archive\.org\/web\/(.+?)\//g;
+      const url = page_url.replace(pattern, "");
+      const open_url = wayback_url+encodeURI(url);
       console.log(open_url);
       if (message.method!='save') {
         URLopener(open_url,url,true);
@@ -423,9 +423,9 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
   }else if(message.message=='makemodal'){
             RTurl=message.rturl;
             console.log(RTurl);
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                var tab=tabs[0];
-                var url=RTurl;
+            chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+                const tab=tabs[0];
+                const url=RTurl;
                 if(url.includes('web.archive.org') || url.includes('web-beta.archive.org')){
                     //chrome.tabs.sendMessage(tab.id, {message:'nomodal'});
                     alert("Structure as radial tree not available on archive.org pages");
@@ -445,34 +445,34 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
                 }
             });
         }else if(message.message=='sendurl'){
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                var url=tabs[0].url;
-                chrome.tabs.sendMessage(tabs[0].id, {url:url});
+            chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+                const url=tabs[0].url;
+                chrome.tabs.sendMessage(tabs[0].id, {url});
             });
         }else if(message.message=='sendurlforrt'){
             console.log(RTurl);
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.query({active: true, currentWindow: true}, tabs => {
                 //var url=tabs[0].url;
                 console.log(RTurl);
-                chrome.tabs.sendMessage(tabs[0].id, {RTurl:RTurl});
+                chrome.tabs.sendMessage(tabs[0].id, {RTurl});
                 console.log(RTurl);
             });
         }
 });
 
-chrome.webRequest.onErrorOccurred.addListener(function(details) {
+chrome.webRequest.onErrorOccurred.addListener(details => {
       function tabIsReady(isIncognito) {
         if(details.error == 'net::ERR_NAME_NOT_RESOLVED' || details.error == 'net::ERR_NAME_RESOLUTION_FAILED'
         || details.error == 'net::ERR_CONNECTION_TIMED_OUT'  || details.error == 'net::ERR_NAME_NOT_RESOLVED' ){
-          wmAvailabilityCheck(details.url, function(wayback_url, url) {
-            chrome.tabs.update(details.tabId, {url: chrome.extension.getURL('dnserror.html')+"?url="+wayback_url});
-          }, function() {
+          wmAvailabilityCheck(details.url, (wayback_url, url) => {
+            chrome.tabs.update(details.tabId, {url: `${chrome.extension.getURL('dnserror.html')}?url=${wayback_url}`});
+          }, () => {
             
           });
         }
       }
       if(details.tabId >0 ){
-        chrome.tabs.get(details.tabId, function(tab) {
+        chrome.tabs.get(details.tabId, tab => {
           tabIsReady(tab.incognito);
         });
       }
@@ -480,29 +480,29 @@ chrome.webRequest.onErrorOccurred.addListener(function(details) {
 
 
 // create context menu using for loops
-var contextList=["first","recent","all","save"];
-var contextTitle=["First Version","Recent Version","All Versions","Save Page Now"]
+const contextList=["first","recent","all","save"];
+const contextTitle=["First Version","Recent Version","All Versions","Save Page Now"];
 for(i=0;i<contextList.length;i++){
   chrome.contextMenus.create({id:contextList[i],title:contextTitle[i],contexts:["all"]});
 }
 
 function contextMenuOpener(type,page_url){
-    var pattern = /https:\/\/web\.archive\.org\/web\/(.+?)\//g;
+    const pattern = /https:\/\/web\.archive\.org\/web\/(.+?)\//g;
     if(typeof type ==='number'){
         var wmAvailabilitycheck=true;
-        var wayback_url ="https://web.archive.org/web/"+type+"/";
+        var wayback_url =`https://web.archive.org/web/${type}/`;
     }else{
         var wmAvailabilitycheck=false;
-        var wayback_url ="https://web.archive.org/"+type;
+        var wayback_url =`https://web.archive.org/${type}`;
     }
-    var url = page_url.replace(pattern, "");
-    var open_url = wayback_url+encodeURI(url);
+    const url = page_url.replace(pattern, "");
+    const open_url = wayback_url+encodeURI(url);
     URLopener(open_url,url,wmAvailabilitycheck);
 }
 
-chrome.contextMenus.onClicked.addListener(function(clickedData){
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        var page_url=tabs[0].url;
+chrome.contextMenus.onClicked.addListener(clickedData => {
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+        const page_url=tabs[0].url;
         if(clickedData.menuItemId=='first'){
             contextMenuOpener(0,page_url);
         }else if(clickedData.menuItemId=='recent'){
