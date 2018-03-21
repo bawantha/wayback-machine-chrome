@@ -505,6 +505,7 @@ chrome.contextMenus.onClicked.addListener(clickedData => {
         const page_url=tabs[0].url;
         if(clickedData.menuItemId=='first'){
             contextMenuOpener(0,page_url);
+            alert("et");
         }else if(clickedData.menuItemId=='recent'){
             contextMenuOpener(2,page_url);
         }else if(clickedData.menuItemId=='save'){
@@ -515,81 +516,8 @@ chrome.contextMenus.onClicked.addListener(clickedData => {
     });
 });
 
-
-
-//function auto_save(tabId){
-//
-//            chrome.tabs.get(tabId, function(tab) {
-//                var page_url = tab.url;
-//                if(isValidUrl(page_url)){
-//                    chrome.browserAction.setBadgeBackgroundColor({color:"yellow",tabId: tabId});
-//                    chrome.browserAction.setBadgeText({tabId: tabId, text:"..."});            // checking the archives
-//
-//                    wmAvailabilityCheck(page_url,function(){
-//                        chrome.browserAction.setBadgeBackgroundColor({color:"green",tabId: tabId});
-//                        chrome.browserAction.setBadgeText({tabId: tab.id, text:"\u2713"});  // webpage is archived
-//                        console.error(page_url+'is already saved');
-//                    },function(){
-//                        chrome.browserAction.setBadgeBackgroundColor({color:"red", tabId: tabId});
-//                        chrome.browserAction.setBadgeText({tabId: tab.id, text:"\u2613"});                 // webpage not archived
-//                        console.error(page_url+'is not already saved');
-//                        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-//                            var tab = tabs[0];
-//                            var page_url = tab.url;
-//                            //var wb_url = "https://web.archive.org/save/";
-//                            var wb_url = "https://web-beta.archive.org/save/";
-//                            var pattern = /https:\/\/web\.archive\.org\/web\/(.+?)\//g;
-//                            url = page_url.replace(pattern, "");
-//                            open_url = wb_url+encodeURI(url);
-//                            var xhr=new XMLHttpRequest();
-//                            xhr.open('POST',open_url,true);
-//                            //xhr.open('GET',open_url,true);
-//                            xhr.setRequestHeader('Accept','application/json');
-//                            xhr.onerror=function(){
-//                                chrome.browserAction.setBadgeBackgroundColor({color:"red", tabId: tabId});
-//                                    chrome.browserAction.setBadgeText({tabId: tab.id,text:"\u26d4"});
-//                                    console.error(page_url+' error unknown');
-//                            };
-//                            xhr.onload=function(){
-//                                console.log(xhr.status);
-//                                if(xhr.status==200){
-//                                    chrome.browserAction.setBadgeBackgroundColor({color:"blue", tabId: tabId});
-//                                    chrome.browserAction.setBadgeText({tabId: tab.id,text:"\u2713"});
-//                                    console.error(page_url+'is saved now');
-//                                }else if(xhr.status==403){
-//                                    chrome.browserAction.setBadgeBackgroundColor({color:"red", tabId: tabId});
-//                                    chrome.browserAction.setBadgeText({tabId: tab.id,text:"\u26d4"});
-//                                    console.error(page_url+' save is forbidden');
-//                                }else if(xhr.status==503){
-//                                    chrome.browserAction.setBadgeBackgroundColor({color:"red", tabId: tabId});
-//                                    chrome.browserAction.setBadgeText({tabId: tab.id,text:"\u26d4"});
-//                                    console.error(page_url+' service unavailable');
-//                                }else if(xhr.status==504){
-//                                    chrome.browserAction.setBadgeBackgroundColor({color:"red", tabId: tabId});
-//                                    chrome.browserAction.setBadgeText({tabId: tab.id,text:"\u26d4"});
-//                                    console.error(page_url+' gateway timeout');
-//                                }
-//                            };
-//                            xhr.send();
-//                        });
-//                    });
-//                }
-//            });
-//}
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){    
-//    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-//        
-//                  if (changeInfo.status == "complete" && !(tab.url.startsWith("http://web.archive.org/web") || tab.url.startsWith("https://web.archive.org/web") || tab.url.startsWith("https://web-beta.archive.org/web") || tab.url.startsWith("chrome://") )) {
-//              chrome.storage.sync.get(['as'], function(items) {
-//                
-//              if(items.as){
-//                auto_save(tab.id);
-//              }
-//            });
-//            
-//          }else{
-//                    
-//                    chrome.browserAction.setBadgeText({tabId: tabId, text:""});
-//          }
-// });
-// });
+chrome.runtime.onInstalled.addListener(function (object) {
+  chrome.tabs.create({url: "wellcome.html"}, function (tab) {
+      console.log("New tab launched with http://google.com/");
+  });
+});
